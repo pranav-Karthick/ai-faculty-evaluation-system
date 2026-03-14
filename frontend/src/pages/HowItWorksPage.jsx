@@ -1,11 +1,9 @@
 import * as React from "react";
 import LandingNavbar from "@/components/landing/LandingNavbar";
-import HeroSection from "@/components/landing/HeroSection";
-import FeaturesSection from "@/components/landing/FeaturesSection";
 import WorkflowSection from "@/components/landing/WorkflowSection";
 import LandingFooter from "@/components/landing/LandingFooter";
 
-const LandingPage = () => {
+const HowItWorksPage = () => {
     return (
         <div className="dark">
             <div className="min-h-screen bg-background flex flex-col font-sans selection:bg-primary/20 selection:text-primary relative">
@@ -15,8 +13,8 @@ const LandingPage = () => {
                 <div className="relative z-10 flex flex-col min-h-screen">
                     <LandingNavbar />
 
-                    <main className="flex-grow">
-                        <HeroSection />
+                    <main className="flex-grow pt-20">
+                        <WorkflowSection />
                     </main>
 
                     <LandingFooter />
@@ -26,4 +24,4 @@ const LandingPage = () => {
     );
 };
 
-export default LandingPage;
+export default HowItWorksPage;

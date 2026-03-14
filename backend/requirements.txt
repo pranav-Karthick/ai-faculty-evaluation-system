@@ -2,9 +2,14 @@ fastapi
 uvicorn
 motor
 pydantic
+fastapi
+uvicorn
+motor
+pydantic
 pydantic-settings
 python-dotenv
 python-multipart
 passlib[bcrypt]
 python-jose[cryptography]
 email-validator
+google-genai

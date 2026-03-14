@@ -8,10 +8,11 @@ import Login from "@/pages/Login";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 import StudentDashboard from "@/pages/StudentDashboard";
-import FeedbackForm from "@/pages/FeedbackForm";
 import AdminDashboard from "@/pages/AdminDashboard";
 import FacultyPerformance from "@/pages/FacultyPerformance";
 import NotFound from "./pages/NotFound";
+import FeaturesPage from "@/pages/FeaturesPage";
+import HowItWorksPage from "@/pages/HowItWorksPage";
 
 import DashboardLayout from "@/layouts/DashboardLayout";
 
@@ -26,6 +27,8 @@ const App = () => (
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/login" element={<Login />} />
 
           {/* Student Routes */}
@@ -35,7 +38,6 @@ const App = () => (
             </ProtectedRoute>
           }>
             <Route path="/student" element={<StudentDashboard />} />
-            <Route path="/feedback/:id" element={<FeedbackForm />} />
           </Route>
 
           {/* Admin Routes */}

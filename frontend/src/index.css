@@ -1,13 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
 @layer base {
   :root {
     /* Premium Blue-Purple Theme - Light Mode */
-    --background: 240 30% 98%; /* Soft cool white */
+    --background: 240 30% 98%;
+    /* Soft cool white */
     --foreground: 240 10% 3.9%;
 
     --card: 0 0% 100%;
@@ -26,7 +27,8 @@
     --muted: 240 5% 96%;
     --muted-foreground: 240 3.8% 46.1%;
 
-    --accent: 256 90% 96%; /* Very light purple */
+    --accent: 256 90% 96%;
+    /* Very light purple */
     --accent-foreground: 256 90% 64%;
 
     --destructive: 0 84.2% 60.2%;
@@ -36,11 +38,14 @@
     --input: 240 5.9% 90%;
     --ring: 256 90% 64%;
 
-    --radius: 1rem; /* Rounded-2xl look (16px) */
-    
-    --gradient-start: 256 90% 64%; /* Purple */
-    --gradient-end: 220 90% 56%;   /* Blue */
-    
+    --radius: 1rem;
+    /* Rounded-2xl look (16px) */
+
+    --gradient-start: 256 90% 64%;
+    /* Purple */
+    --gradient-end: 220 90% 56%;
+    /* Blue */
+
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 240 10% 3.9%;
     --sidebar-primary: 256 90% 64%;
@@ -56,7 +61,8 @@
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
 
-    --card: 240 10% 7%; /* Slightly lighter than bg */
+    --card: 240 10% 7%;
+    /* Slightly lighter than bg */
     --card-foreground: 0 0% 98%;
 
     --popover: 240 10% 7%;
@@ -71,7 +77,7 @@
     --muted: 240 4% 16%;
     --muted-foreground: 240 5% 65%;
 
-    --accent: 256 50% 16%; 
+    --accent: 256 50% 16%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -80,7 +86,7 @@
     --border: 240 4% 16%;
     --input: 240 4% 16%;
     --ring: 256 90% 64%;
-    
+
     --sidebar-background: 240 10% 5%;
     --sidebar-foreground: 240 5% 90%;
     --sidebar-primary: 256 90% 64%;
@@ -96,6 +102,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-primary;
     font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
@@ -103,11 +110,12 @@
 }
 
 @layer components {
+
   /* Glassmorphism Utilities */
   .glass {
     @apply bg-white/70 dark:bg-black/50 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-lg;
   }
-  
+
   .glass-card {
     @apply glass rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
   }
@@ -116,7 +124,7 @@
   .bg-gradient-brand {
     @apply bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500;
   }
-  
+
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600 dark:from-indigo-400 dark:to-purple-400;
   }
@@ -125,10 +133,56 @@
   ::-webkit-scrollbar {
     width: 8px;
   }
+
   ::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
+
   ::-webkit-scrollbar-thumb {
     @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/40;
   }
+
+  /* Landing Page Redesign Utilities */
+  .glass-panel {
+    @apply bg-[#0f172a]/40 backdrop-blur-xl border border-white/10;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4), inset 0 0 10px rgba(139, 92, 246, 0.2);
+  }
+
+  .neon-border {
+    position: relative;
+  }
+
+  .neon-border::before {
+    content: "";
+    @apply absolute inset-0 rounded-[inherit] border border-transparent pointer-events-none;
+    background: linear-gradient(to right, #8b5cf6, #22d3ee) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+  }
+
+  .animated-gradient-text {
+    @apply text-transparent bg-clip-text bg-[length:200%_auto] animate-gradient-x;
+    background-image: linear-gradient(to right, #8b5cf6, #22d3ee, #8b5cf6);
+  }
+}
+
+@keyframes gradient-x {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 6s ease infinite;
 }

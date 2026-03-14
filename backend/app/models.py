@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
-from typing import List, Optional
+from typing import List, Optional, Union
 from datetime import datetime
 from bson import ObjectId
 
@@ -44,6 +44,7 @@ class FacultyBase(BaseModel):
     name: str
     department: str
     subject: Optional[str] = None # Added subject as it's in frontend
+    semester: Union[str, int, None] = None # Semester the faculty teaches
 
 class FacultyCreate(FacultyBase):
     pass
@@ -60,18 +61,44 @@ class FacultyResponse(FacultyBase):
         json_encoders={ObjectId: str}
     )
 
+class RatingsInput(BaseModel):
+    clarity: int = Field(..., ge=1, le=5)
+    knowledge: int = Field(..., ge=1, le=5)
+    engagement: int = Field(..., ge=1, le=5)
+    communication: int = Field(..., ge=1, le=5)
+    punctuality: int = Field(..., ge=1, le=5)
+
 # --- Feedback Models ---
 class FeedbackCreate(BaseModel):
     faculty_id: str
-    clarity_score: int = Field(..., ge=1, le=5)
-    knowledge_score: int = Field(..., ge=1, le=5)
-    doubt_solving: int = Field(..., ge=1, le=5)
+    department: str
+    semester: Union[str, int]
+    ratings: RatingsInput
     comment: Optional[str] = None
+
+class AIAverageRatings(BaseModel):
+    clarity: float
+    knowledge: float
+    engagement: float
+    communication: float
+    punctuality: float
+
+class AISentiment(BaseModel):
+    positive: float
+    neutral: float
+    negative: float
+
+class AIAnalysisResponse(BaseModel):
+    sentiment: AISentiment
+    strengths: List[str] = []
+    concerns: List[str] = []
+    summary: str = ""
 
 class FeedbackResponse(FeedbackCreate):
     id: str = Field(alias="_id")
     student_email: str
     overall_rating: float
+    ai_analysis: Optional[AIAnalysisResponse] = None
     created_at: datetime
 
     model_config = ConfigDict(
@@ -81,13 +108,38 @@ class FeedbackResponse(FeedbackCreate):
     )
 
 # --- Admin Analytics Models ---
-class FacultyPerformance(BaseModel):
-    faculty_name: str
-    avg_rating: float
-    total_reviews: int
+class FacultyAIAnalysis(BaseModel):
+    faculty_id: str
+    department: str = "Unknown"
+    semester: Union[str, int] = "Unknown"
+    summary: str = "No analysis available"
+    strengths: List[str] = []
+    concerns: List[str] = []
+    sentiment: AISentiment = Field(default_factory=lambda: AISentiment(positive=0.0, neutral=100.0, negative=0.0))
+    feedback_count: int = 0
+    average_ratings: AIAverageRatings = Field(default_factory=lambda: AIAverageRatings(clarity=0.0, knowledge=0.0, engagement=0.0, communication=0.0, punctuality=0.0))
+    generated_at: datetime
+    
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_encoders={ObjectId: str}
+    )
 
-class AdminAnalyticsResponse(BaseModel):
+class FacultyStats(BaseModel):
+    faculty_id: str
+    faculty_name: str
+    total_reviews: int
+    average_ratings: AIAverageRatings
+    ai_analysis: Optional[FacultyAIAnalysis] = None
+
+class AdminStatsResponse(BaseModel):
     total_students: int
     total_feedback: int
     overall_average_rating: float
-    faculty_performance: List[FacultyPerformance]
+    faculty_stats: List[FacultyStats]
+
+
+class AdminAIAnalysisResponse(BaseModel):
+    ai_analysis: List[FacultyAIAnalysis]
+

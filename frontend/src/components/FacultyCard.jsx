@@ -29,24 +29,18 @@ const FacultyCard = ({ faculty, onFeedback, onView }) => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-2 py-3 border-t border-b border-border/50 mb-4 bg-secondary/10 rounded-xl px-2">
+        <div className="grid grid-cols-2 gap-2 py-3 border-t border-b border-border/50 mb-4 bg-secondary/10 rounded-xl px-2">
           <div className="text-center">
             <div className="flex items-center justify-center gap-1 text-yellow-500 font-bold">
-              <Star className="h-3.5 w-3.5 fill-yellow-500" /> {faculty.avgRating}
+              <Star className="h-3.5 w-3.5 fill-yellow-500" /> {faculty.average_rating || faculty.avgRating || "N/A"}
             </div>
             <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Rating</p>
           </div>
           <div className="text-center border-l border-border/50">
             <div className="flex items-center justify-center gap-1 text-blue-500 font-bold">
-              <MessageSquare className="h-3.5 w-3.5" /> {faculty.totalFeedbacks}
+              <MessageSquare className="h-3.5 w-3.5" /> {faculty.total_reviews || faculty.totalFeedbacks || 0}
             </div>
             <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Reviews</p>
-          </div>
-          <div className="text-center border-l border-border/50">
-            <div className={`font-bold ${faculty.sentimentScore >= 80 ? "text-green-500" : "text-orange-500"}`}>
-              {faculty.sentimentScore}%
-            </div>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Sentiment</p>
           </div>
         </div>
 
@@ -59,7 +53,7 @@ const FacultyCard = ({ faculty, onFeedback, onView }) => {
           )}
           {onFeedback && (
             <Button onClick={() => onFeedback(faculty)} className="flex-1 h-9 text-xs rounded-lg bg-gradient-brand hover:opacity-90 shadow-sm">
-              Rate Now
+              Rate Faculty
             </Button>
           )}
         </div>

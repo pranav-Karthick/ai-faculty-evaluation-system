@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, CheckCircle2, Star } from "lucide-react";
-import { faculties } from "@/data/mockData";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { ArrowLeft, CheckCircle2, Star, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -9,31 +8,59 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { apiRequest } from "@/utils/api";
 
 const ratingLabels = [
-  { key: "teachingClarity", label: "Teaching Clarity", desc: "How clearly does the faculty explain concepts?" },
-  { key: "subjectKnowledge", label: "Subject Knowledge", desc: "Depth of knowledge in the subject area." },
-  { key: "interaction", label: "Interaction", desc: "Engagement with students during class." },
-  { key: "punctuality", label: "Punctuality", desc: "Timeliness in starting and ending sessions." },
-  { key: "doubtSolving", label: "Doubt Solving", desc: "Effectiveness in clarifying student queries." },
+  { key: "clarity_score", label: "Teaching Clarity", desc: "How clearly does the faculty explain concepts?" },
+  { key: "knowledge_score", label: "Subject Knowledge", desc: "Depth of knowledge in the subject area." },
+  { key: "engagement_score", label: "Engagement", desc: "Engagement with students during class." },
+  { key: "communication_score", label: "Communication", desc: "Effectiveness of communication skills." },
+  { key: "punctuality_score", label: "Punctuality", desc: "Timeliness in starting and ending sessions." },
 ];
 
 const FeedbackForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
-  const faculty = faculties.find((f) => f.id === id);
+
+  const [faculty, setFaculty] = useState(location.state?.faculty || null);
+  const [loading, setLoading] = useState(!faculty);
 
   const [ratings, setRatings] = useState({
-    teachingClarity: 3,
-    subjectKnowledge: 3,
-    interaction: 3,
-    punctuality: 3,
-    doubtSolving: 3,
+    clarity_score: 3,
+    knowledge_score: 3,
+    engagement_score: 3,
+    communication_score: 3,
+    punctuality_score: 3,
   });
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!faculty) {
+      const fetchFaculty = async () => {
+        try {
+          const res = await apiRequest("/faculty");
+          if (res.ok) {
+            const data = await res.json();
+            const found = data.find(f => f._id === id || f.id === id);
+            setFaculty(found);
+          }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchFaculty();
+    }
+  }, [id, faculty]);
+
+  if (loading) {
+    return <div className="flex justify-center items-center h-full min-h-[500px]"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+  }
 
   if (!faculty) {
     return (
@@ -43,13 +70,50 @@ const FeedbackForm = () => {
     );
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
+
+    try {
+      const payload = {
+        faculty_id: faculty.id || faculty._id,
+        clarity_score: ratings.clarity_score,
+        knowledge_score: ratings.knowledge_score,
+        engagement_score: ratings.engagement_score,
+        communication_score: ratings.communication_score,
+        punctuality_score: ratings.punctuality_score,
+        comment: comment
+      };
+
+      const response = await apiRequest("/feedback", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        let errorMessage = "Failed to submit feedback";
+        if (errorData.detail) {
+          if (typeof errorData.detail === "string") {
+            errorMessage = errorData.detail;
+          } else if (Array.isArray(errorData.detail)) {
+            errorMessage = errorData.detail.map(err => `${err.loc.slice(-1).join(".")}: ${err.msg}`).join(", ");
+          }
+        }
+        throw new Error(errorMessage);
+      }
+
       setShowSuccess(true);
-    }, 1000);
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Could not submit feedback.",
+        variant: "destructive"
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleSuccessClose = () => {
