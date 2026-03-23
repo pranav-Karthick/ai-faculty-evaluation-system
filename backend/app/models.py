@@ -51,7 +51,7 @@ class FacultyCreate(FacultyBase):
 
 class FacultyResponse(FacultyBase):
     id: str = Field(alias="_id")
-    avg_rating: float = 0.0
+    avg_rating: Union[float, str, None] = "N/A"
     total_reviews: int = 0
     created_at: datetime
 

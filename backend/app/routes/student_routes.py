@@ -25,17 +25,50 @@ async def get_semesters(db = Depends(get_database)):
 @router.get("/faculty", response_model=List[FacultyResponse])
 async def get_faculty_list(
     department: Optional[str] = None,
+    semester: Optional[str] = None,
     current_user: dict = Depends(get_current_active_student),
     db = Depends(get_database)
 ):
     query = {}
     if department:
-        query["department"] = department
+        query["department"] = {"$regex": f"^{department}$", "$options": "i"}
+    if semester:
+        sem_val = str(semester).replace("Semester ", "").strip()
+        normalized_semester = int(sem_val) if sem_val.isdigit() else sem_val
+        query["semester"] = {"$in": [normalized_semester, str(normalized_semester)]}
         
     faculty_cursor = db.faculties.find(query)
     faculty_list = await faculty_cursor.to_list(length=None)
     for faculty in faculty_list:
         faculty["_id"] = str(faculty["_id"])
+        
+        # Calculate reviews using MongoDB feedback collection strictly
+        faculty_id_obj = ObjectId(faculty["_id"])
+        
+        review_count = await db.feedback.count_documents({
+            "faculty_id": faculty_id_obj
+        })
+        
+        if review_count > 0:
+            pipeline = [
+                {"$match": {"faculty_id": faculty_id_obj}},
+                {"$group": {"_id": None, "avg_rating": {"$avg": "$overall_rating"}}}
+            ]
+            aggregate_cursor = db.feedback.aggregate(pipeline)
+            aggregate_result = await aggregate_cursor.to_list(length=1)
+            
+            if aggregate_result and aggregate_result[0].get("avg_rating") is not None:
+                faculty["avg_rating"] = round(aggregate_result[0]["avg_rating"], 1)
+            else:
+                faculty["avg_rating"] = "N/A"
+        else:
+            faculty["avg_rating"] = "N/A"
+            
+        faculty["total_reviews"] = review_count
+        
+        # Debug backend log as requested
+        print(f"Faculty: {faculty.get('name')}, Review count: {review_count}")
+
     return faculty_list
 
 @router.post("/feedback")

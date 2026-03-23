@@ -39,6 +39,7 @@ const Login = () => {
             localStorage.setItem("access_token", data.access_token || data.token);
             localStorage.setItem("role", data.role);
             localStorage.setItem("name", data.name);
+            localStorage.setItem("email", email);
 
             // Redirect based on role
             if (data.role === "student") {

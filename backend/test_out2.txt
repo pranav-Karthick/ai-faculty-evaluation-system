@@ -1,0 +1,33 @@
+{'name': 'Dr. Ramesh Kumar', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000001'}
+{'name': 'Prof. Anita Sharma', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000002'}
+{'name': 'Dr. Arvind Rao', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000003'}
+{'name': 'Ms. Sneha Iyer', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000004'}
+{'name': 'Dr. Vivek Sharma', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000005'}
+{'name': 'Prof. Karthik Nair', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000006'}
+{'name': 'Dr. Rahul Mehta', 'db_total_reviews': 2, 'calculated_reviews': 0, 'id': '65f1a1000000000000000007'}
+{'name': 'Prof. Neha Kapoor', 'db_total_reviews': 1, 'calculated_reviews': 0, 'id': '65f1a1000000000000000008'}
+{'name': 'Dr. Sanjay Gupta', 'db_total_reviews': 1, 'calculated_reviews': 0, 'id': '65f1a1000000000000000009'}
+{'name': 'Ms. Priya Verma', 'db_total_reviews': 1, 'calculated_reviews': 0, 'id': '65f1a1000000000000000010'}
+{'name': 'Dr. Mohit Jain', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000011'}
+{'name': 'Prof. Ritu Agarwal', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000012'}
+{'name': 'Dr. Vikram Patel', 'db_total_reviews': 1, 'calculated_reviews': 0, 'id': '65f1a1000000000000000013'}
+{'name': 'Prof. Kavita Singh', 'db_total_reviews': 1, 'calculated_reviews': 0, 'id': '65f1a1000000000000000014'}
+{'name': 'Dr. Ajay Mishra', 'db_total_reviews': 1, 'calculated_reviews': 1, 'id': '65f1a1000000000000000015'}
+{'name': 'Ms. Pooja Sharma', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000016'}
+{'name': 'Dr. Nitin Khanna', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000017'}
+{'name': 'Prof. Seema Desai', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000018'}
+{'name': 'Dr. Rajesh Kumar', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000019'}
+{'name': 'Prof. Anjali Nair', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000020'}
+{'name': 'Dr. Suresh Patel', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000021'}
+{'name': 'Ms. Kavya Menon', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000022'}
+{'name': 'Dr. Manish Gupta', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000023'}
+{'name': 'Prof. Deepa Iyer', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000024'}
+{'name': 'Dr. Arjun Sharma', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000025'}
+{'name': 'Prof. Manoj Kumar', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000026'}
+{'name': 'Dr. Sandeep Yadav', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000027'}
+{'name': 'Ms. Rekha Nair', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000028'}
+{'name': 'Dr. Vivek Patil', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000029'}
+{'name': 'Prof. Anil Verma', 'db_total_reviews': 0, 'calculated_reviews': 0, 'id': '65f1a1000000000000000030'}
+
+Total Feedbacks in DB: 1
+FB: 69c0e2c6985a5ff56c1e8ba9 -> Faculty: 65f1a1000000000000000015

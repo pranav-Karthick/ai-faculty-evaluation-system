@@ -44,7 +44,8 @@ const StudentDashboard = () => {
     }
 
     setLoading(true);
-    apiRequest(`/faculty?department=${encodeURIComponent(department)}`)
+    const timestamp = new Date().getTime();
+    apiRequest(`/faculty?department=${encodeURIComponent(department)}&semester=${encodeURIComponent(semester)}&t=${timestamp}`)
       .then(res => {
         if (res.status === 401) {
           localStorage.removeItem("access_token");
@@ -57,7 +58,17 @@ const StudentDashboard = () => {
       })
       .then(data => {
         if (Array.isArray(data)) {
-          setFacultyList(data);
+          console.log("API RESPONSE:", data);
+          const fixedData = data.map(f => {
+            const reviewsCount = f.reviews ?? f.total_reviews ?? 0;
+            return {
+              ...f,
+              reviews: reviewsCount,
+              rating: reviewsCount > 0 ? (f.rating ?? f.avg_rating ?? "N/A") : "N/A"
+            };
+          });
+          fixedData.forEach(faculty => console.log("Frontend mapped data:", faculty));
+          setFacultyList(fixedData);
         } else {
           console.error("Expected array for faculties, got:", data);
           setFacultyList([]);
@@ -101,6 +112,7 @@ const StudentDashboard = () => {
   };
 
   useEffect(() => {
+    localStorage.removeItem("facultyData"); // REMOVE ANY OLD DATA Cache
     const token = localStorage.getItem("access_token");
     const role = localStorage.getItem("role");
 

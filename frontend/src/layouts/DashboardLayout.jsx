@@ -8,7 +8,8 @@ import {
     LogOut,
     GraduationCap,
     Menu,
-    X
+    X,
+    User
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,7 +18,22 @@ import { cn } from "@/lib/utils";
 
 const DashboardLayout = ({ role = "student" }) => {
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
+    const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
     const location = useLocation();
+
+    // Decode JWT or fetch from explicit storage
+    const token = localStorage.getItem("token") || localStorage.getItem("access_token");
+    let userEmail = localStorage.getItem("email");
+    if (!userEmail && token) {
+        try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            userEmail = payload.sub || payload.email;
+        } catch (e) {
+            console.error("JWT Decode error", e);
+        }
+    }
+    const user = { email: userEmail, name: localStorage.getItem("name") };
+    console.log("Dashboard User:", user);
 
     const navItems = {
         student: [
@@ -31,7 +47,6 @@ const DashboardLayout = ({ role = "student" }) => {
         admin: [
             { icon: LayoutDashboard, label: "Overview", href: "/admin" },
             { icon: Users, label: "Faculty Mgmt", href: "/admin/faculty" },
-            { icon: GraduationCap, label: "Students", href: "/admin/students" },
         ]
     };
 
@@ -75,20 +90,8 @@ const DashboardLayout = ({ role = "student" }) => {
                     })}
                 </nav>
 
-                <div className="p-4 border-t border-border">
-                    <Button
-                        variant="outline"
-                        className="w-full gap-2 border-destructive/20 hover:bg-destructive/10 hover:text-destructive text-destructive"
-                        onClick={() => {
-                            localStorage.removeItem("token");
-                            localStorage.removeItem("role");
-                            localStorage.removeItem("name");
-                            window.location.href = "/login";
-                        }}
-                    >
-                        <LogOut className="h-4 w-4" />
-                        Sign Out
-                    </Button>
+                <div className="p-4 border-t border-border hidden md:block">
+                    {/* Placeholder to keep spacing if needed, removed SignOut button here */}
                 </div>
             </aside>
 
@@ -135,15 +138,48 @@ const DashboardLayout = ({ role = "student" }) => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="text-right hidden sm:block">
-                                <p className="text-sm font-medium leading-none">{localStorage.getItem("name") || "User"}</p>
-                                <p className="text-xs text-muted-foreground capitalize">{role}</p>
-                            </div>
-                            <Avatar className="h-9 w-9 border border-border">
-                                <AvatarImage src="https://github.com/shadcn.png" />
-                                <AvatarFallback>JD</AvatarFallback>
-                            </Avatar>
+                        <div className="relative">
+                            <Button 
+                                variant="ghost" 
+                                className="rounded-full h-10 w-10 p-0" 
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            >
+                                <div className="h-9 w-9 rounded-full bg-gradient-brand flex items-center justify-center shadow-sm">
+                                    <User className="h-5 w-5 text-white" />
+                                </div>
+                            </Button>
+                            
+                            {isDropdownOpen && (
+                                <>
+                                    <div 
+                                        className="fixed inset-0 z-40" 
+                                        onClick={() => setIsDropdownOpen(false)}
+                                    />
+                                    <div className="absolute right-0 mt-2 w-56 bg-card border border-border rounded-xl shadow-xl z-50 overflow-hidden text-sm animate-in slide-in-from-top-2 fade-in duration-200">
+                                        <div className="p-3 border-b border-border bg-secondary/30">
+                                            <p className="font-medium truncate text-foreground">{user?.email || (role === "admin" ? "Admin" : "Student")}</p>
+                                            <p className="text-xs text-muted-foreground capitalize mt-0.5">Role: {role}</p>
+                                        </div>
+                                        <div className="p-2">
+                                            <Button 
+                                                variant="ghost" 
+                                                className="w-full justify-start text-destructive hover:bg-destructive/10 hover:text-destructive gap-2 h-9"
+                                                onClick={() => {
+                                                    localStorage.removeItem("access_token");
+                                                    localStorage.removeItem("token");
+                                                    localStorage.removeItem("role");
+                                                    localStorage.removeItem("name");
+                                                    localStorage.removeItem("email");
+                                                    window.location.href = "/login";
+                                                }}
+                                            >
+                                                <LogOut className="h-4 w-4" />
+                                                Sign Out
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </header>
