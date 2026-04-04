@@ -22,6 +22,6 @@ app.add_middleware(
 )
 
 # Include Routers
-app.include_router(auth_routes.router, tags=["Authentication"])
+app.include_router(auth_routes.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(student_routes.router, tags=["Student"]) # No prefix, as routes are /faculty and /feedback
 app.include_router(admin_routes.router, prefix="/admin", tags=["Admin"])

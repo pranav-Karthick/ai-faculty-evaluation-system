@@ -20,7 +20,7 @@ const Login = () => {
         setError("");
 
         try {
-            const response = await fetch("https://ai-faculty-evaluation-system.onrender.com/login", {
+            const response = await fetch("https://ai-faculty-evaluation-system.onrender.com/api/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
