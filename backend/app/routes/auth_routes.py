@@ -8,6 +8,7 @@ router = APIRouter()
 
 @router.post("/login")
 async def login(form_data: LoginSchema):
+    print("Login endpoint hit")
     db = get_database()
 
     user = await db.users.find_one({"email": form_data.email})

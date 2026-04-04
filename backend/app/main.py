@@ -10,12 +10,13 @@ app = FastAPI(title="Faculty Evaluation Backend")
 
 settings = get_settings()
 
+origins = [
+    "https://ai-faculty-evaluation-system.vercel.app"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://ai-faculty-evaluation-system.vercel.app"
-    ],
+    allow_origins=["*"],  # use "*" for now to test
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
